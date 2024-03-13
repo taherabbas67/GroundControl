@@ -1,14 +1,14 @@
 import tkinter as tk
 from dronekit import connect, VehicleMode
 import threading
-import time  # Import 'time' for sleep in arm_and_takeoff
+import time
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
 # Function to connect to the drone
 def connect_drone():
     global vehicle
-    connection_string = "/dev/tty.usbserial-0001"  # Example connection string, replace with your actual USB connection info
+    connection_string = "/dev/tty.usbserial-0001"
     print("Connecting to drone on: %s" % connection_string)
     vehicle = connect(connection_string, baud=57600)
     update_flight_data()
@@ -20,7 +20,7 @@ def update_flight_data():
         altitude.config(text=f"Altitude: {vehicle.location.global_relative_frame.alt}")
         speed.config(text=f"Speed: {vehicle.groundspeed}")
         flight_mode.config(text=f"Flight Mode: {vehicle.mode.name}")
-    root.after(1000, update_flight_data)  # Update the labels every second
+    root.after(1000, update_flight_data)
 
 # Function to change flight modes
 def set_flight_mode(new_mode):
@@ -43,7 +43,7 @@ def arm_and_takeoff(aTargetAltitude):
             time.sleep(1)
 
         print("Taking off!")
-        vehicle.simple_takeoff(aTargetAltitude)  # Take off to target altitude
+        vehicle.simple_takeoff(aTargetAltitude)
 
 # Creating the main window
 root = ttk.Window(title="Ground Control", size=(800, 600), themename="darkly")
@@ -64,7 +64,7 @@ connect_button.pack(side=tk.RIGHT, padx=10)
 status_frame = ttk.Frame(root, padding=20)
 status_frame.pack(fill=tk.BOTH, expand=True)
 
-# Labels for displaying flight data with larger font and padding for better visibility
+# Labels for displaying flight data
 battery_level = ttk.Label(status_frame, text="Battery: N/A", font=("Helvetica", 12), padding=10)
 battery_level.pack()
 
@@ -77,8 +77,37 @@ speed.pack()
 flight_mode = ttk.Label(status_frame, text="Flight Mode: N/A", font=("Helvetica", 12), padding=10)
 flight_mode.pack()
 
+# Function to create a flight mode button
+def create_flight_mode_button(text, mode, style):
+    return ttk.Button(root, text=text, bootstyle=style, command=lambda: set_flight_mode(mode))
+
+# Creating buttons for each flight mode
+buttons_frame = ttk.Frame(root)
+buttons_frame.pack(fill=tk.X, pady=10)
+
+loiter_button = create_flight_mode_button("Loiter", "LOITER", WARNING)
+loiter_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
+
+althold_button = create_flight_mode_button("Alt Hold", "ALT_HOLD", INFO)
+althold_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
+
+stabilize_button = create_flight_mode_button("Stabilize", "STABILIZE", PRIMARY)
+stabilize_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
+
+land_button = create_flight_mode_button("Land", "LAND", DANGER)
+land_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
+
+rtl_button = create_flight_mode_button("RTL", "RTL", SUCCESS)
+rtl_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
+
+guided_button = create_flight_mode_button("Guided", "GUIDED", SECONDARY)
+guided_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
+
+auto_button = create_flight_mode_button("Auto", "AUTO", DARK)
+auto_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
+
 # Control buttons
-mode_button = ttk.Button(root, text="Set Flight Mode", bootstyle=WARNING, command=lambda: set_flight_mode("GUIDED"))
+mode_button = ttk.Button(root, text="Set Flight Mode", bootstyle=WARNING)
 mode_button.pack(pady=5)
 
 arm_takeoff_button = ttk.Button(root, text="Arm & Take Off", bootstyle=DANGER, command=lambda: arm_and_takeoff(10))
