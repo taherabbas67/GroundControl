@@ -27,7 +27,18 @@ def update_flight_data():
         sat_count.config(text=f"Satellites: {vehicle.gps_0.satellites_visible}")
         latitude.config(text=f"Latitude: {vehicle.location.global_frame.lat}")
         longitude.config(text=f"Longitude: {vehicle.location.global_frame.lon}")
+        update_map(vehicle.location.global_frame.lat, vehicle.location.global_frame.lon)
     root.after(1000, update_flight_data)
+
+# Function to update the map with the current location
+def update_map(lat, lon):
+    m = folium.Map(location=[lat, lon], zoom_start=15)
+    folium.Marker([lat, lon], tooltip="Drone Location").add_to(m)
+
+    # Save the map to a temporary file and display it in the WebView
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
+    m.save(temp_file.name)
+    webview_window.load_url(temp_file.name)
 
 # Function to change flight modes
 def set_flight_mode(new_mode):
