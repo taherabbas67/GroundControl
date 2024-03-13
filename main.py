@@ -214,4 +214,6 @@ takeoff_button.pack(side=tk.LEFT, expand=True, padx=5)
 
 
 # Start the Tkinter loop
-root.mainloop()
+# root.mainloop()
+# Start the Tkinter loop in a thread
+threading.Thread(target=lambda: root.mainloop()).start()
