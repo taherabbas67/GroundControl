@@ -106,9 +106,7 @@ guided_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 auto_button = create_flight_mode_button("Auto", "AUTO", DARK)
 auto_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
-# Control buttons
-mode_button = ttk.Button(root, text="Set Flight Mode", bootstyle=WARNING)
-mode_button.pack(pady=5)
+
 
 arm_takeoff_button = ttk.Button(root, text="Arm & Take Off", bootstyle=DANGER, command=lambda: arm_and_takeoff(10))
 arm_takeoff_button.pack(pady=5)
