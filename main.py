@@ -31,22 +31,47 @@ def set_flight_mode(new_mode):
         vehicle.mode = VehicleMode(new_mode)
 
 # Function to arm and take off
-def arm_and_takeoff(aTargetAltitude):
-    if vehicle:
-        while not vehicle.is_armable:
-            print(" Waiting for vehicle to initialise...")
-            time.sleep(1)
+# def arm_and_takeoff(aTargetAltitude):
+#     if vehicle:
+#         while not vehicle.is_armable:
+#             print(" Waiting for vehicle to initialise...")
+#             time.sleep(1)
 
+#         print("Arming motors")
+#         vehicle.mode = VehicleMode("GUIDED")
+#         vehicle.armed = True
+
+#         while not vehicle.armed:
+#             print(" Waiting for arming...")
+#             time.sleep(1)
+
+#         print("Taking off!")
+#         vehicle.simple_takeoff(aTargetAltitude)
+
+# Function to arm the vehicle
+def arm_vehicle():
+    if vehicle:
         print("Arming motors")
         vehicle.mode = VehicleMode("GUIDED")
         vehicle.armed = True
-
         while not vehicle.armed:
-            print(" Waiting for arming...")
+            print("Waiting for arming...")
             time.sleep(1)
 
+# Function to disarm the vehicle
+def disarm_vehicle():
+    if vehicle:
+        print("Disarming motors")
+        vehicle.armed = False
+        while vehicle.armed:
+            print("Waiting for disarming...")
+            time.sleep(1)
+
+# Function to take off
+def takeoff(aTargetAltitude):
+    if vehicle and vehicle.armed:
         print("Taking off!")
-        vehicle.simple_takeoff(aTargetAltitude)
+        vehicle.simple_takeoff(aTargetAltitude)  # Take off to target altitude
 
 # Creating the main window
 root = ttk.Window(title="Ground Control", size=(800, 600), themename="darkly")
@@ -94,30 +119,30 @@ status_frame.pack(fill=tk.BOTH, expand=True)
 first_row_frame = ttk.Frame(root, padding=10)
 first_row_frame.pack(fill=tk.X)
 
-battery_level = ttk.Label(first_row_frame, text="Battery: N/A", font=("Helvetica", 12))
-battery_level.pack(side=tk.LEFT, expand=True, padx=5)
+battery_level = ttk.Label(first_row_frame, text="Battery: N/A", font=("Helvetica", 20))
+battery_level.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
-altitude = ttk.Label(first_row_frame, text="Altitude: N/A", font=("Helvetica", 12))
-altitude.pack(side=tk.LEFT, expand=True, padx=5)
+altitude = ttk.Label(first_row_frame, text="Altitude: N/A", font=("Helvetica", 20))
+altitude.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
-speed = ttk.Label(first_row_frame, text="Speed: N/A", font=("Helvetica", 12))
-speed.pack(side=tk.LEFT, expand=True, padx=5)
+speed = ttk.Label(first_row_frame, text="Speed: N/A", font=("Helvetica", 20))
+speed.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
-flight_mode = ttk.Label(first_row_frame, text="Flight Mode: N/A", font=("Helvetica", 12))
-flight_mode.pack(side=tk.LEFT, expand=True, padx=5)
+flight_mode = ttk.Label(first_row_frame, text="Flight Mode: N/A", font=("Helvetica", 20))
+flight_mode.pack(side=tk.LEFT, expand=True, padx=5, pady=5)
 
 # Second row frame for sat count, latitude, longitude
 second_row_frame = ttk.Frame(root, padding=10)
 second_row_frame.pack(fill=tk.X)
 
-sat_count = ttk.Label(second_row_frame, text="Satellites: N/A", font=("Helvetica", 12))
-sat_count.pack(side=tk.LEFT, expand=True, padx=5)
+sat_count = ttk.Label(second_row_frame, text="Satellites: N/A", font=("Helvetica", 20))
+sat_count.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
 
-latitude = ttk.Label(second_row_frame, text="Latitude: N/A", font=("Helvetica", 12))
-latitude.pack(side=tk.LEFT, expand=True, padx=5)
+latitude = ttk.Label(second_row_frame, text="Latitude: N/A", font=("Helvetica", 20))
+latitude.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
 
-longitude = ttk.Label(second_row_frame, text="Longitude: N/A", font=("Helvetica", 12))
-longitude.pack(side=tk.LEFT, expand=True, padx=5)
+longitude = ttk.Label(second_row_frame, text="Longitude: N/A", font=("Helvetica", 20))
+longitude.pack(side=tk.LEFT, expand=True, padx=5, pady=10)
 
 
 # Function to create a flight mode button
@@ -150,9 +175,22 @@ auto_button = create_flight_mode_button("Auto", "AUTO", DARK)
 auto_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
 
+# Control buttons frame
+control_buttons_frame = ttk.Frame(root, padding=10)
+control_buttons_frame.pack(fill=tk.X)
 
-arm_takeoff_button = ttk.Button(root, text="Arm & Take Off", bootstyle=DANGER, command=lambda: arm_and_takeoff(10))
-arm_takeoff_button.pack(pady=5)
+# Arm button
+arm_button = ttk.Button(control_buttons_frame, text="Arm", bootstyle=DANGER, command=arm_vehicle)
+arm_button.pack(side=tk.LEFT, expand=True, padx=5)
+
+# Disarm button
+disarm_button = ttk.Button(control_buttons_frame, text="Disarm", bootstyle=DANGER, command=disarm_vehicle)
+disarm_button.pack(side=tk.LEFT, expand=True, padx=5)
+
+# Take Off button
+takeoff_button = ttk.Button(control_buttons_frame, text="Take Off", bootstyle=DANGER, command=lambda: takeoff(10))
+takeoff_button.pack(side=tk.LEFT, expand=True, padx=5)
+
 
 # Start the Tkinter loop
 root.mainloop()
