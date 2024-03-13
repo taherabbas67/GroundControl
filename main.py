@@ -20,6 +20,9 @@ def update_flight_data():
         altitude.config(text=f"Altitude: {vehicle.location.global_relative_frame.alt}")
         speed.config(text=f"Speed: {vehicle.groundspeed}")
         flight_mode.config(text=f"Flight Mode: {vehicle.mode.name}")
+        sat_count.config(text=f"Satellites: {vehicle.gps_0.satellites_visible}")
+        latitude.config(text=f"Latitude: {vehicle.location.global_frame.lat}")
+        longitude.config(text=f"Longitude: {vehicle.location.global_frame.lon}")
     root.after(1000, update_flight_data)
 
 # Function to change flight modes
@@ -76,6 +79,15 @@ speed.pack()
 
 flight_mode = ttk.Label(status_frame, text="Flight Mode: N/A", font=("Helvetica", 12), padding=10)
 flight_mode.pack()
+
+sat_count = ttk.Label(status_frame, text="Satellites: N/A", font=("Helvetica", 12), padding=10)
+sat_count.pack()
+
+latitude = ttk.Label(status_frame, text="Latitude: N/A", font=("Helvetica", 12), padding=10)
+latitude.pack()
+
+longitude = ttk.Label(status_frame, text="Longitude: N/A", font=("Helvetica", 12), padding=10)
+longitude.pack()
 
 # Function to create a flight mode button
 def create_flight_mode_button(text, mode, style):
