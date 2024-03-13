@@ -67,27 +67,58 @@ connect_button.pack(side=tk.RIGHT, padx=10)
 status_frame = ttk.Frame(root, padding=20)
 status_frame.pack(fill=tk.BOTH, expand=True)
 
-# Labels for displaying flight data
-battery_level = ttk.Label(status_frame, text="Battery: N/A", font=("Helvetica", 12), padding=10)
-battery_level.pack()
+# # Labels for displaying flight data
+# battery_level = ttk.Label(status_frame, text="Battery: N/A", font=("Helvetica", 12), padding=10)
+# battery_level.pack()
 
-altitude = ttk.Label(status_frame, text="Altitude: N/A", font=("Helvetica", 12), padding=10)
-altitude.pack()
+# altitude = ttk.Label(status_frame, text="Altitude: N/A", font=("Helvetica", 12), padding=10)
+# altitude.pack()
 
-speed = ttk.Label(status_frame, text="Speed: N/A", font=("Helvetica", 12), padding=10)
-speed.pack()
+# speed = ttk.Label(status_frame, text="Speed: N/A", font=("Helvetica", 12), padding=10)
+# speed.pack()
 
-flight_mode = ttk.Label(status_frame, text="Flight Mode: N/A", font=("Helvetica", 12), padding=10)
-flight_mode.pack()
+# flight_mode = ttk.Label(status_frame, text="Flight Mode: N/A", font=("Helvetica", 12), padding=10)
+# flight_mode.pack()
 
-sat_count = ttk.Label(status_frame, text="Satellites: N/A", font=("Helvetica", 12), padding=10)
-sat_count.pack()
+# sat_count = ttk.Label(status_frame, text="Satellites: N/A", font=("Helvetica", 12), padding=10)
+# sat_count.pack()
 
-latitude = ttk.Label(status_frame, text="Latitude: N/A", font=("Helvetica", 12), padding=10)
-latitude.pack()
+# latitude = ttk.Label(status_frame, text="Latitude: N/A", font=("Helvetica", 12), padding=10)
+# latitude.pack()
 
-longitude = ttk.Label(status_frame, text="Longitude: N/A", font=("Helvetica", 12), padding=10)
-longitude.pack()
+# longitude = ttk.Label(status_frame, text="Longitude: N/A", font=("Helvetica", 12), padding=10)
+# longitude.pack()
+
+
+# First row frame for battery, altitude, speed, flight mode
+first_row_frame = ttk.Frame(root, padding=10)
+first_row_frame.pack(fill=tk.X)
+
+battery_level = ttk.Label(first_row_frame, text="Battery: N/A", font=("Helvetica", 12))
+battery_level.pack(side=tk.LEFT, expand=True, padx=5)
+
+altitude = ttk.Label(first_row_frame, text="Altitude: N/A", font=("Helvetica", 12))
+altitude.pack(side=tk.LEFT, expand=True, padx=5)
+
+speed = ttk.Label(first_row_frame, text="Speed: N/A", font=("Helvetica", 12))
+speed.pack(side=tk.LEFT, expand=True, padx=5)
+
+flight_mode = ttk.Label(first_row_frame, text="Flight Mode: N/A", font=("Helvetica", 12))
+flight_mode.pack(side=tk.LEFT, expand=True, padx=5)
+
+# Second row frame for sat count, latitude, longitude
+second_row_frame = ttk.Frame(root, padding=10)
+second_row_frame.pack(fill=tk.X)
+
+sat_count = ttk.Label(second_row_frame, text="Satellites: N/A", font=("Helvetica", 12))
+sat_count.pack(side=tk.LEFT, expand=True, padx=5)
+
+latitude = ttk.Label(second_row_frame, text="Latitude: N/A", font=("Helvetica", 12))
+latitude.pack(side=tk.LEFT, expand=True, padx=5)
+
+longitude = ttk.Label(second_row_frame, text="Longitude: N/A", font=("Helvetica", 12))
+longitude.pack(side=tk.LEFT, expand=True, padx=5)
+
 
 # Function to create a flight mode button
 def create_flight_mode_button(text, mode, style):
