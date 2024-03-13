@@ -103,6 +103,12 @@ navbar_title.pack(side=tk.LEFT, padx=10)
 connect_button = ttk.Button(navbar_frame, text="Connect", bootstyle=SUCCESS, command=lambda: threading.Thread(target=connect_drone).start())
 connect_button.pack(side=tk.RIGHT, padx=10)
 
+# Map frame using PyWebView
+map_frame = ttk.Frame(root, height=400)
+map_frame.pack(fill=tk.BOTH, expand=True)
+webview_window = webview.create_window('Map', '', width=800, height=400)
+webview.start(func=update_map(0, 0), args=(), gui='tkinter', window=map_frame)
+
 # Status frame
 status_frame = ttk.Frame(root, padding=20)
 status_frame.pack(fill=tk.BOTH, expand=True)
