@@ -4,10 +4,10 @@ import threading
 import time
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
-import folium
-import tempfile
-import webview
-import os
+# import folium
+# import tempfile
+# import webview
+# import os
 
 # Function to connect to the drone
 def connect_drone():
@@ -27,18 +27,9 @@ def update_flight_data():
         sat_count.config(text=f"Satellites: {vehicle.gps_0.satellites_visible}")
         latitude.config(text=f"Latitude: {vehicle.location.global_frame.lat}")
         longitude.config(text=f"Longitude: {vehicle.location.global_frame.lon}")
-        update_map(vehicle.location.global_frame.lat, vehicle.location.global_frame.lon)
     root.after(1000, update_flight_data)
 
-# Function to update the map with the current location
-def update_map(lat, lon):
-    m = folium.Map(location=[lat, lon], zoom_start=15)
-    folium.Marker([lat, lon], tooltip="Drone Location").add_to(m)
 
-    # Save the map to a temporary file and display it in the WebView
-    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
-    m.save(temp_file.name)
-    webview_window.load_url(temp_file.name)
 
 # Function to change flight modes
 def set_flight_mode(new_mode):
@@ -103,37 +94,13 @@ navbar_title.pack(side=tk.LEFT, padx=10)
 connect_button = ttk.Button(navbar_frame, text="Connect", bootstyle=SUCCESS, command=lambda: threading.Thread(target=connect_drone).start())
 connect_button.pack(side=tk.RIGHT, padx=10)
 
-# Map frame using PyWebView
-map_frame = ttk.Frame(root, height=400)
-map_frame.pack(fill=tk.BOTH, expand=True)
-webview_window = webview.create_window('Map', '', width=800, height=400)
-webview.start(func=update_map(0, 0), args=(), gui='tkinter', window=map_frame)
+
 
 # Status frame
 status_frame = ttk.Frame(root, padding=20)
 status_frame.pack(fill=tk.BOTH, expand=True)
 
-# # Labels for displaying flight data
-# battery_level = ttk.Label(status_frame, text="Battery: N/A", font=("Helvetica", 12), padding=10)
-# battery_level.pack()
 
-# altitude = ttk.Label(status_frame, text="Altitude: N/A", font=("Helvetica", 12), padding=10)
-# altitude.pack()
-
-# speed = ttk.Label(status_frame, text="Speed: N/A", font=("Helvetica", 12), padding=10)
-# speed.pack()
-
-# flight_mode = ttk.Label(status_frame, text="Flight Mode: N/A", font=("Helvetica", 12), padding=10)
-# flight_mode.pack()
-
-# sat_count = ttk.Label(status_frame, text="Satellites: N/A", font=("Helvetica", 12), padding=10)
-# sat_count.pack()
-
-# latitude = ttk.Label(status_frame, text="Latitude: N/A", font=("Helvetica", 12), padding=10)
-# latitude.pack()
-
-# longitude = ttk.Label(status_frame, text="Longitude: N/A", font=("Helvetica", 12), padding=10)
-# longitude.pack()
 
 
 # First row frame for battery, altitude, speed, flight mode
@@ -214,6 +181,4 @@ takeoff_button.pack(side=tk.LEFT, expand=True, padx=5)
 
 
 # Start the Tkinter loop
-# root.mainloop()
-# Start the Tkinter loop in a thread
-threading.Thread(target=lambda: root.mainloop()).start()
+root.mainloop()
