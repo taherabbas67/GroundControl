@@ -4,6 +4,10 @@ import threading
 import time
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
+import folium
+import tempfile
+import webview
+import os
 
 # Function to connect to the drone
 def connect_drone():
@@ -176,7 +180,7 @@ auto_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
 
 # Control buttons frame
-control_buttons_frame = ttk.Frame(root, padding=10)
+control_buttons_frame = ttk.Frame(root, padding=30)
 control_buttons_frame.pack(fill=tk.X)
 
 # Arm button
