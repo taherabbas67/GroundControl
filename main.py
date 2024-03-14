@@ -4,10 +4,6 @@ import threading
 import time
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
-# import folium
-# import tempfile
-# import webview
-# import os
 
 # Function to connect to the drone
 def connect_drone():
@@ -16,6 +12,17 @@ def connect_drone():
     print("Connecting to drone on: %s" % connection_string)
     vehicle = connect(connection_string, baud=57600)
     update_flight_data()
+
+def disconnect_drone():
+    global vehicle
+    # Disconnecting logic here
+    if vehicle:
+        print("Disconnecting from drone...")
+        vehicle.close()
+        # Update disconnection status or handle additional cleanup
+        vehicle = None
+    else:
+        print("No drone connected.")
 
 # Function to update flight data on the interface
 def update_flight_data():
@@ -27,7 +34,7 @@ def update_flight_data():
         sat_count.config(text=f"Satellites: {vehicle.gps_0.satellites_visible}")
         latitude.config(text=f"Latitude: {vehicle.location.global_frame.lat}")
         longitude.config(text=f"Longitude: {vehicle.location.global_frame.lon}")
-    root.after(1000, update_flight_data)
+    root.after(100, update_flight_data)#reduced delay from 1000 to 100
 
 
 
@@ -35,24 +42,6 @@ def update_flight_data():
 def set_flight_mode(new_mode):
     if vehicle:
         vehicle.mode = VehicleMode(new_mode)
-
-# Function to arm and take off
-# def arm_and_takeoff(aTargetAltitude):
-#     if vehicle:
-#         while not vehicle.is_armable:
-#             print(" Waiting for vehicle to initialise...")
-#             time.sleep(1)
-
-#         print("Arming motors")
-#         vehicle.mode = VehicleMode("GUIDED")
-#         vehicle.armed = True
-
-#         while not vehicle.armed:
-#             print(" Waiting for arming...")
-#             time.sleep(1)
-
-#         print("Taking off!")
-#         vehicle.simple_takeoff(aTargetAltitude)
 
 # Function to arm the vehicle
 def arm_vehicle():
@@ -94,13 +83,13 @@ navbar_title.pack(side=tk.LEFT, padx=10)
 connect_button = ttk.Button(navbar_frame, text="Connect", bootstyle=SUCCESS, command=lambda: threading.Thread(target=connect_drone).start())
 connect_button.pack(side=tk.RIGHT, padx=10)
 
-
+# Disconnect button
+disconnect_button = ttk.Button(navbar_frame, text="Disconnect", bootstyle=DANGER, command=disconnect_drone)
+disconnect_button.pack(side=tk.RIGHT)
 
 # Status frame
 status_frame = ttk.Frame(root, padding=20)
 status_frame.pack(fill=tk.BOTH, expand=True)
-
-
 
 
 # First row frame for battery, altitude, speed, flight mode
@@ -141,25 +130,25 @@ def create_flight_mode_button(text, mode, style):
 buttons_frame = ttk.Frame(root)
 buttons_frame.pack(fill=tk.X, pady=10)
 
-loiter_button = create_flight_mode_button("Loiter", "LOITER", WARNING)
+loiter_button = create_flight_mode_button("Loiter", "LOITER", INFO)
 loiter_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
 althold_button = create_flight_mode_button("Alt Hold", "ALT_HOLD", INFO)
 althold_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
-stabilize_button = create_flight_mode_button("Stabilize", "STABILIZE", PRIMARY)
+stabilize_button = create_flight_mode_button("Stabilize", "STABILIZE", INFO)
 stabilize_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
-land_button = create_flight_mode_button("Land", "LAND", DANGER)
+land_button = create_flight_mode_button("Land", "LAND", INFO)
 land_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
-rtl_button = create_flight_mode_button("RTL", "RTL", SUCCESS)
+rtl_button = create_flight_mode_button("RTL", "RTL", INFO)
 rtl_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
-guided_button = create_flight_mode_button("Guided", "GUIDED", SECONDARY)
+guided_button = create_flight_mode_button("Guided", "GUIDED", INFO)
 guided_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
-auto_button = create_flight_mode_button("Auto", "AUTO", DARK)
+auto_button = create_flight_mode_button("Auto", "AUTO", INFO)
 auto_button.pack(in_=buttons_frame, side=tk.LEFT, expand=True, padx=2)
 
 
